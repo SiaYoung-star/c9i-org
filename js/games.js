@@ -1,6 +1,4 @@
-const $loading = document.getElementById("loading");
 const $catalog = document.getElementById("catalog");
-const $error = document.getElementById("error");
 
 function cardHtml(game) {
   const img = game.image
@@ -38,13 +36,10 @@ async function loadCatalog() {
     const data = await res.json();
     const games = data.games || [];
     if (!games.length) throw new Error("empty");
-
     $catalog.innerHTML = games.map(cardHtml).join("");
-    $loading.classList.add("hidden");
-    $catalog.classList.remove("hidden");
   } catch {
-    $loading.classList.add("hidden");
-    $error.classList.remove("hidden");
+    $catalog.innerHTML =
+      '<p class="catalog-loading">Could not load games. <a href="/">Try the random pick</a> instead.</p>';
   }
 }
 

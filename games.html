@@ -3,46 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Browse Games · c9i.org</title>
-  <meta name="description" content="Browse free browser games from EasyHub with short intros" />
+  <title>All Games · PLAY RANDOM</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="/css/style.css" />
 </head>
 <body>
-  <div class="bg" aria-hidden="true"></div>
+  <div class="stars" aria-hidden="true"></div>
 
-  <header class="topbar">
-    <a class="brand" href="/">c9i</a>
-    <nav>
-      <a href="/">Random pick</a>
-      <a href="/games.html" class="active">Browse games</a>
-      <a href="https://easyhub.games/" target="_blank" rel="noopener noreferrer">EasyHub.games</a>
+  <header class="header">
+    <a class="logo" href="/">
+      <span class="logo-die">🎲</span>
+      <span class="logo-text">PLAY RANDOM</span>
+    </a>
+    <nav class="nav">
+      <a href="/" class="nav-link">Home</a>
+      <a href="/games.html" class="nav-link active">All Games</a>
+      <a href="/#about" class="nav-link">About</a>
     </nav>
+    <a href="/" class="btn-surprise header-surprise"><span class="btn-icon">🎁</span> Surprise Me!</a>
   </header>
 
-  <main class="page browse-page">
-    <header class="browse-header">
-      <h1>Game gallery</h1>
-      <p>Hand-picked titles from EasyHub with a taste of each intro. Tap a card to play.</p>
-    </header>
+  <div class="page-header">
+    <h1>All Games</h1>
+    <p>Browse free picks from EasyHub — tap any card to play instantly.</p>
+  </div>
 
-    <section class="panel loading-panel" id="loading">
-      <div class="dice" aria-hidden="true">🎲</div>
-      <p>Loading game catalog…</p>
-    </section>
-
-    <div class="catalog hidden" id="catalog"></div>
-
-    <section class="panel error-panel hidden" id="error">
-      <p>Could not load the catalog.</p>
-      <a class="btn btn-ghost" href="/">Back to random pick</a>
-    </section>
-  </main>
+  <div class="catalog" id="catalog">
+    <p class="catalog-loading">Loading game gallery…</p>
+  </div>
 
   <footer class="footer">
-    <p>Content from <a href="https://easyhub.games/" target="_blank" rel="noopener noreferrer">EasyHub.games</a>.</p>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-die">🎲</span>
+        <span class="logo-text">PLAY RANDOM</span>
+        <p class="footer-tag">Discover. Play. Enjoy.</p>
+      </div>
+      <div class="social">
+        <a href="https://easyhub.games/" target="_blank" rel="noopener noreferrer">𝕏</a>
+        <a href="https://easyhub.games/" target="_blank" rel="noopener noreferrer">💬</a>
+        <a href="https://easyhub.games/" target="_blank" rel="noopener noreferrer">📷</a>
+      </div>
+      <div class="footer-end">
+        <a href="https://easyhub.games/" target="_blank" rel="noopener noreferrer">
+          All games from easyhub.games <span class="ext">↗</span>
+        </a>
+        <span class="footer-pad">🎮</span>
+      </div>
+    </div>
   </footer>
 
   <script src="/js/games.js" type="module"></script>

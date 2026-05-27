@@ -1,110 +1,133 @@
-const KICKERS = [
-  "The arcade dice say…",
-  "Today's lucky spin:",
-  "A wild game appears!",
-  "Button mashers approve:",
-  "Level up your break with:",
-  "RNG gods have spoken:",
-];
+const $ = (id) => document.getElementById(id);
 
-const $loading = document.getElementById("loading");
-const $game = document.getElementById("game");
-const $error = document.getElementById("error");
-const $kicker = document.getElementById("kicker");
+const els = {
+  frameLoading: $("frame-loading"),
+  heroImage: $("hero-image"),
+  heroFallback: $("hero-fallback"),
+  playHero: $("play-hero"),
+  aboutTitle: $("about-title"),
+  aboutDesc: $("about-desc"),
+  tags: $("tags"),
+  statDifficulty: $("stat-difficulty"),
+  error: $("error"),
+};
 
-const $title = document.getElementById("game-title");
-const $poster = document.getElementById("poster");
-const $posterFallback = document.getElementById("poster-fallback");
-const $excerpt = document.getElementById("intro-excerpt");
-const $full = document.getElementById("intro-full");
-const $toggle = document.getElementById("toggle-intro");
-const $play = document.getElementById("play-link");
-const $url = document.getElementById("game-url");
+let currentGame = null;
 
-function pickKicker() {
-  return KICKERS[Math.floor(Math.random() * KICKERS.length)];
-}
-
-function show(state) {
-  $loading.classList.toggle("hidden", state !== "loading");
-  $game.classList.toggle("hidden", state !== "game");
-  $error.classList.toggle("hidden", state !== "error");
-}
-
-function setImage(url, title) {
-  if (url) {
-    $poster.src = url;
-    $poster.alt = `${title} cover art`;
-    $poster.classList.remove("hidden");
-    $posterFallback.classList.add("hidden");
-    $poster.onerror = () => {
-      $poster.classList.add("hidden");
-      $posterFallback.classList.remove("hidden");
-    };
-  } else {
-    $poster.removeAttribute("src");
-    $poster.classList.add("hidden");
-    $posterFallback.classList.remove("hidden");
+function guessTags(title, desc) {
+  const text = `${title} ${desc}`.toLowerCase();
+  const pool = [
+    { re: /race|car|drive|moto|bike|drift/, tag: "Racing" },
+    { re: /puzzle|brain|match|word/, tag: "Puzzle" },
+    { re: /shoot|fps|gun|sniper|war/, tag: "Action" },
+    { re: /zombie|horror|scary/, tag: "Horror" },
+    { re: /soccer|football|basket|sport/, tag: "Sports" },
+    { re: /jump|run|parkour|obby/, tag: "Jump & Run" },
+    { re: /click|idle|merge/, tag: "Casual" },
+    { re: /multi|2 player|two player/, tag: "Multiplayer" },
+  ];
+  const tags = [];
+  for (const p of pool) {
+    if (p.re.test(text) && !tags.includes(p.tag)) tags.push(p.tag);
   }
+  const defaults = ["Arcade", "Casual", "Fun", "Browser"];
+  for (const d of defaults) {
+    if (tags.length >= 4) break;
+    if (!tags.includes(d)) tags.push(d);
+  }
+  return tags.slice(0, 4);
 }
 
-function setupIntro(game) {
-  const full = game.description || game.excerpt || "";
-  const excerpt = game.excerpt || makeLocalExcerpt(full);
-  const hasMore = full.length > (excerpt.length + 40);
+function guessDifficulty(desc) {
+  const t = (desc || "").toLowerCase();
+  if (/hard|difficult|challenge|expert/.test(t)) return "Hard";
+  if (/easy|casual|relax|simple/.test(t)) return "Easy";
+  return "Easy to Medium";
+}
 
-  $excerpt.textContent = excerpt;
-  $full.textContent = full;
-  $full.classList.add("hidden");
-  $toggle.classList.toggle("hidden", !hasMore);
-  $toggle.textContent = "Read full intro";
+function setFrameLoading(on) {
+  els.frameLoading.classList.toggle("hidden", !on);
+}
 
-  $toggle.onclick = () => {
-    const open = !$full.classList.contains("hidden");
-    $full.classList.toggle("hidden", open);
-    $excerpt.classList.toggle("hidden", !open);
-    $toggle.textContent = open ? "Read full intro" : "Show less";
+function setHeroImage(url, title) {
+  const img = els.heroImage;
+  const fb = els.heroFallback;
+  if (!url) {
+    img.classList.add("hidden");
+    fb.classList.remove("hidden");
+    return;
+  }
+  img.onload = () => {
+    img.classList.remove("hidden");
+    fb.classList.add("hidden");
+    setFrameLoading(false);
   };
-}
-
-function makeLocalExcerpt(text) {
-  if (!text) return "A free browser game waiting for you on EasyHub — hit play to jump in.";
-  if (text.length <= 320) return text;
-  return text.slice(0, 300).trim() + "…";
+  img.onerror = () => {
+    img.classList.add("hidden");
+    fb.classList.remove("hidden");
+    setFrameLoading(false);
+  };
+  img.src = url;
+  img.alt = `${title} cover art`;
 }
 
 function render(game) {
-  $kicker.textContent = pickKicker();
-  $title.textContent = game.title;
-  $play.href = game.url;
-  $play.textContent = `Play ${game.title} on EasyHub →`;
-  $url.href = game.url;
-  $url.textContent = game.url;
+  currentGame = game;
+  const title = game.title || "Random Game";
+  const desc = game.description || game.excerpt || "A free browser game from EasyHub.";
+  const excerpt = game.excerpt || desc;
 
-  setImage(game.image, game.title);
-  setupIntro(game);
-  show("game");
+  els.playHero.href = game.url;
+  els.playHero.textContent = "PLAY NOW →";
+
+  els.aboutTitle.textContent = title;
+  els.aboutDesc.textContent = excerpt;
+
+  els.tags.innerHTML = guessTags(title, desc)
+    .map((t) => `<span class="tag">${escapeHtml(t)}</span>`)
+    .join("");
+
+  els.statDifficulty.textContent = guessDifficulty(desc);
+
+  setFrameLoading(true);
+  setHeroImage(game.image, title);
+
+  document.title = `${title} · PLAY RANDOM`;
+  els.error.classList.add("hidden");
+}
+
+function escapeHtml(s) {
+  return String(s)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
 }
 
 async function loadRandom() {
-  show("loading");
-  $loading.classList.add("shuffling");
-  $kicker.textContent = "Rolling the arcade dice…";
+  setFrameLoading(true);
+  els.error.classList.add("hidden");
 
   try {
     const res = await fetch("/api/random", { cache: "no-store" });
-    if (!res.ok) throw new Error("API error");
+    if (!res.ok) throw new Error("api");
     const game = await res.json();
-    if (!game?.url) throw new Error("Invalid game");
+    if (!game?.url) throw new Error("empty");
     render(game);
   } catch {
-    show("error");
-  } finally {
-    $loading.classList.remove("shuffling");
+    els.error.classList.remove("hidden");
+    setFrameLoading(false);
   }
 }
 
-document.getElementById("shuffle-btn").addEventListener("click", loadRandom);
-document.getElementById("retry-btn").addEventListener("click", loadRandom);
+function bindSurpriseButtons() {
+  for (const id of ["header-surprise", "cta-surprise", "prev-game", "next-game"]) {
+    const el = $(id);
+    if (el) el.addEventListener("click", loadRandom);
+  }
+}
 
+$("retry-btn")?.addEventListener("click", loadRandom);
+
+bindSurpriseButtons();
 loadRandom();
