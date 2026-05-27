@@ -1,0 +1,13 @@
+{
+  "name": "c9i-org",
+  "version": "1.0.0",
+  "private": true,
+  "description": "c9i.org random game redirect",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "pages:deploy": "wrangler pages deploy"
+  },
+  "devDependencies": {
+    "wrangler": "^3.99.0"
+  }
+}

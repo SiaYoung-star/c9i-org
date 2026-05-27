@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Random Game Pick · c9i.org</title>
+  <meta name="description" content="Discover a random free browser game with intro, art, and a link to play on EasyHub.games" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/css/style.css" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <div class="bg" aria-hidden="true"></div>
+  <div class="floaters" aria-hidden="true">
+    <span>🎮</span><span>🎲</span><span>✨</span><span>🕹️</span>
+  </div>
+
+  <header class="topbar">
+    <a class="brand" href="/">c9i</a>
+    <nav>
+      <a href="/games.html">Browse games</a>
+      <a href="https://easyhub.games/" target="_blank" rel="noopener noreferrer">EasyHub.games</a>
+    </nav>
+  </header>
+
+  <main class="page">
+    <p class="kicker" id="kicker">Rolling the arcade dice…</p>
+
+    <section class="panel loading-panel" id="loading">
+      <div class="dice" aria-hidden="true">🎲</div>
+      <p>Finding something fun for you…</p>
+    </section>
+
+    <article class="panel game-panel hidden" id="game" aria-live="polite">
+      <div class="poster-wrap">
+        <img class="poster" id="poster" src="" alt="" loading="lazy" />
+        <div class="poster-fallback hidden" id="poster-fallback" aria-hidden="true">🎮</div>
+      </div>
+
+      <div class="game-body">
+        <p class="pick-label">Your random pick</p>
+        <h1 class="game-title" id="game-title"></h1>
+
+        <div class="intro-block">
+          <p class="intro excerpt" id="intro-excerpt"></p>
+          <div class="intro-full hidden" id="intro-full"></div>
+          <button type="button" class="text-btn hidden" id="toggle-intro">Read full intro</button>
+        </div>
+
+        <div class="actions">
+          <a class="btn btn-play" id="play-link" href="#" target="_blank" rel="noopener noreferrer">
+            Play on EasyHub →
+          </a>
+          <button type="button" class="btn btn-ghost" id="shuffle-btn">🎲 Pick another</button>
+        </div>
+
+        <p class="link-row">
+          Game page:
+          <a id="game-url" href="#" target="_blank" rel="noopener noreferrer"></a>
+        </p>
+      </div>
+    </article>
+
+    <section class="panel error-panel hidden" id="error">
+      <p>Could not load a game right now.</p>
+      <button type="button" class="btn btn-ghost" id="retry-btn">Try again</button>
+    </section>
+  </main>
+
+  <footer class="footer">
+  <p>Games &amp; descriptions from <a href="https://easyhub.games/" target="_blank" rel="noopener noreferrer">EasyHub.games</a>. c9i.org is a fan discovery site.</p>
+  </footer>
+
+  <script src="/js/app.js" type="module"></script>
+</body>
+</html>

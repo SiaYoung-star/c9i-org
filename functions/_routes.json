@@ -1,0 +1,6 @@
+{
+  "version": 1,
+  "description": "Only run Functions on /api/* so the homepage serves static index.html (no auto-redirect).",
+  "include": ["/api/*"],
+  "exclude": []
+}

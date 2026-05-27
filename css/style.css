@@ -1,0 +1,428 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --bg: #070b14;
+  --card: rgba(16, 22, 38, 0.88);
+  --line: rgba(120, 200, 255, 0.2);
+  --text: #eef3ff;
+  --muted: #93a0bb;
+  --pink: #ff6bcb;
+  --cyan: #3ee7ff;
+  --violet: #9b7bff;
+  --lime: #b8ff5c;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  font-family: "Outfit", system-ui, sans-serif;
+  color: var(--text);
+  background: var(--bg);
+  line-height: 1.55;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.bg {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background:
+    radial-gradient(ellipse 70% 50% at 15% -10%, rgba(62, 231, 255, 0.18), transparent),
+    radial-gradient(ellipse 55% 45% at 90% 10%, rgba(255, 107, 203, 0.14), transparent),
+    radial-gradient(ellipse 50% 40% at 50% 100%, rgba(155, 123, 255, 0.12), transparent),
+    var(--bg);
+}
+
+.floaters {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.floaters span {
+  position: absolute;
+  font-size: 1.5rem;
+  opacity: 0.35;
+  animation: drift 14s ease-in-out infinite;
+}
+
+.floaters span:nth-child(1) { left: 8%; top: 18%; animation-delay: 0s; }
+.floaters span:nth-child(2) { right: 12%; top: 28%; animation-delay: -3s; }
+.floaters span:nth-child(3) { left: 20%; bottom: 22%; animation-delay: -6s; }
+.floaters span:nth-child(4) { right: 18%; bottom: 14%; animation-delay: -9s; }
+
+@keyframes drift {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-18px) rotate(8deg); }
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.brand {
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem;
+  text-decoration: none;
+  background: linear-gradient(120deg, var(--cyan), var(--pink));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.topbar nav {
+  display: flex;
+  gap: 1.25rem;
+}
+
+.topbar nav a {
+  color: var(--muted);
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.topbar nav a:hover,
+.topbar nav a.active {
+  color: var(--cyan);
+}
+
+.page {
+  flex: 1;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 0 1.25rem 3rem;
+  width: 100%;
+}
+
+.kicker {
+  text-align: center;
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.1rem, 3vw, 1.45rem);
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+  color: var(--lime);
+  text-shadow: 0 0 24px rgba(184, 255, 92, 0.35);
+}
+
+.panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 1.35rem;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 28px 80px rgba(0, 0, 0, 0.45);
+}
+
+.hidden {
+  display: none !important;
+}
+
+.loading-panel {
+  text-align: center;
+  padding: 3rem 1.5rem;
+  color: var(--muted);
+}
+
+.dice {
+  font-size: 3rem;
+  display: inline-block;
+  animation: roll 1.1s ease-in-out infinite;
+  margin-bottom: 0.75rem;
+}
+
+@keyframes roll {
+  0%, 100% { transform: rotate(0deg) scale(1); }
+  25% { transform: rotate(-18deg) scale(1.08); }
+  75% { transform: rotate(18deg) scale(1.08); }
+}
+
+.loading-panel.shuffling .dice {
+  animation-duration: 0.45s;
+}
+
+.game-panel {
+  display: grid;
+  grid-template-columns: 1fr 1.1fr;
+  gap: 0;
+  overflow: hidden;
+  animation: popIn 0.55s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+@keyframes popIn {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.poster-wrap {
+  position: relative;
+  min-height: 280px;
+  background: linear-gradient(145deg, rgba(62, 231, 255, 0.12), rgba(155, 123, 255, 0.18));
+}
+
+.poster {
+  width: 100%;
+  height: 100%;
+  min-height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+.poster-fallback {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  font-size: 4rem;
+  background: linear-gradient(160deg, #121a2e, #1a1030);
+}
+
+.game-body {
+  padding: 1.75rem 1.6rem;
+}
+
+.pick-label {
+  font-size: 0.75rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink);
+  font-weight: 700;
+  margin-bottom: 0.35rem;
+}
+
+.game-title {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.45rem, 4vw, 2rem);
+  line-height: 1.15;
+  margin-bottom: 1rem;
+}
+
+.intro-block {
+  margin-bottom: 1.35rem;
+}
+
+.intro {
+  color: #c5d0ea;
+  font-size: 0.98rem;
+}
+
+.intro-full {
+  color: #b8c4de;
+  font-size: 0.95rem;
+  max-height: 220px;
+  overflow-y: auto;
+  margin-top: 0.65rem;
+  padding-right: 0.25rem;
+}
+
+.text-btn {
+  margin-top: 0.5rem;
+  background: none;
+  border: none;
+  color: var(--cyan);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 0;
+}
+
+.text-btn:hover {
+  text-decoration: underline;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+
+.btn {
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.95rem;
+  padding: 0.8rem 1.25rem;
+  border-radius: 0.75rem;
+  border: none;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-play {
+  background: linear-gradient(120deg, var(--cyan), var(--violet));
+  color: #061018;
+  box-shadow: 0 10px 32px rgba(62, 231, 255, 0.35);
+}
+
+.btn-play:hover {
+  box-shadow: 0 12px 40px rgba(62, 231, 255, 0.45);
+}
+
+.btn-ghost {
+  background: rgba(255, 255, 255, 0.04);
+  color: var(--text);
+  border: 1px solid var(--line);
+}
+
+.btn-ghost:hover {
+  border-color: var(--cyan);
+}
+
+.link-row {
+  font-size: 0.78rem;
+  color: var(--muted);
+  word-break: break-all;
+}
+
+.link-row a {
+  color: var(--cyan);
+}
+
+.error-panel {
+  text-align: center;
+  padding: 2rem;
+  color: #fca5a5;
+}
+
+.footer {
+  text-align: center;
+  padding: 1.5rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.footer a {
+  color: var(--cyan);
+}
+
+/* Browse page */
+.browse-page {
+  max-width: 1100px;
+}
+
+.browse-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.browse-header h1 {
+  font-family: "Space Grotesk", sans-serif;
+  font-size: clamp(1.6rem, 4vw, 2.2rem);
+  margin-bottom: 0.35rem;
+}
+
+.browse-header p {
+  color: var(--muted);
+}
+
+.catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.game-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 1rem;
+  overflow: hidden;
+  text-decoration: none;
+  color: inherit;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+}
+
+.game-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(62, 231, 255, 0.45);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.game-card img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  object-fit: cover;
+  background: #121a2e;
+}
+
+.game-card .thumb-fallback {
+  aspect-ratio: 16 / 10;
+  display: grid;
+  place-items: center;
+  font-size: 2.5rem;
+  background: linear-gradient(160deg, #121a2e, #1a1030);
+}
+
+.game-card .card-body {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.game-card h2 {
+  font-size: 1.05rem;
+  font-family: "Space Grotesk", sans-serif;
+  margin-bottom: 0.45rem;
+  line-height: 1.25;
+}
+
+.game-card p {
+  font-size: 0.85rem;
+  color: var(--muted);
+  flex: 1;
+}
+
+.game-card .play-hint {
+  margin-top: 0.65rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--cyan);
+}
+
+@media (max-width: 768px) {
+  .game-panel {
+    grid-template-columns: 1fr;
+  }
+
+  .poster-wrap,
+  .poster {
+    min-height: 200px;
+  }
+}
